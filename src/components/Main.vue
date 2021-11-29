@@ -22,45 +22,43 @@
       </div>
     </div>
   </nav>
-  <button v-on:click="test">test</button>
   <section>
-    <DoughnutChart :chartData="doughnutTestData" :options="doughnutOption" />
-    <LineChart :chartData="vaccineLineData" :options="lineOption" />
+    <!-- <DoughnutChart :chartData="doughnutTestData" :options="doughnutOption" /> -->
+    <!-- <LineChart :chartData="vaccineLineData" :options="lineOption" /> -->
+    <VacTotalChart :vaccineTotalData="vaccineTotalData" />
+    <VacDayChart
+      :vacLabel="vacLabel"
+      :firstData="firstData"
+      :secondData="secondData"
+      :thirdData="thirdData"
+    />
   </section>
 </template>
 
 <script>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
-import { DoughnutChart, LineChart } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
 
-import { shuffle } from 'lodash';
+import VacTotalChart from './VacTotalChart.vue';
+import VacDayChart from './VacDayChart.vue';
 
 Chart.register(...registerables);
 
 export default {
   name: 'Main',
   components: {
-    DoughnutChart,
-    LineChart,
+    VacTotalChart,
+    VacDayChart,
   },
   props: {},
   setup() {
-    let temp = ref([1, 2, 3, 4, 5]);
-    const doughnutRef = ref();
-    const lineRef = ref();
-
     const vacLabel = ref([]);
     const firstData = ref([]);
     const secondData = ref([]);
     const thirdData = ref([]);
     const vaccineTotalData = ref([]);
-
-    function test() {
-      temp.value = shuffle(temp.value);
-    }
 
     async function getVaccine() {
       const tempTotalData = [];
@@ -82,7 +80,6 @@ export default {
           // 날짜 순으로 차수 별 접종 data 가져오기
           res.data.map((v) => {
             const date = new Date(v.date);
-            console.log(date);
 
             vacLabel.value.push(
               date.getMonth() + 1 + '월' + date.getDate() + '일'
@@ -104,81 +101,12 @@ export default {
       await getVaccine();
     });
 
-    // Doughnut용
-    const doughnutTestData = computed(() => ({
-      labels: ['1차 백신', '2차 백신', '3차 백신'],
-      datasets: [
-        {
-          data: vaccineTotalData.value,
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B'],
-        },
-      ],
-    }));
-    const doughnutOption = ref({
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: '백신 차수별 총 접종 그래프',
-        },
-      },
-    });
-
-    const vaccineLineData = computed(() => ({
-      labels: vacLabel.value,
-      datasets: [
-        {
-          label: '1차 백신',
-          data: firstData.value,
-          pointBackgroundColor: 'white',
-          borderWidth: 1,
-          borderColor: '#77CEFF',
-          pointBorderColor: 'black',
-        },
-        {
-          label: '2차 백신',
-          data: secondData.value,
-          pointBackgroundColor: 'white',
-          borderWidth: 1,
-          borderColor: 'red',
-          pointBorderColor: 'black',
-        },
-        {
-          label: '3차 백신',
-          data: thirdData.value,
-          pointBackgroundColor: 'white',
-          borderWidth: 1,
-          borderColor: '#333333',
-          pointBorderColor: 'black',
-        },
-      ],
-    }));
-    const lineOption = ref({
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: '차수별 접종 추이',
-        },
-      },
-    });
-
     return {
-      vaccineLineData,
-      temp,
-      doughnutRef,
-      lineRef,
-      doughnutTestData,
-      doughnutOption,
       vaccineTotalData,
-      lineOption,
-      test,
+      vacLabel,
+      firstData,
+      secondData,
+      thirdData,
     };
   },
 };

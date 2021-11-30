@@ -1,5 +1,7 @@
 <template>
-  <LineChart :chartData="lineData" :options="lineOption" />
+  <section class="chart_card line">
+    <LineChart :chartData="lineData" :options="lineOption" />
+  </section>
 </template>
 
 <script>
@@ -57,11 +59,12 @@ export default {
       responsive: true,
       plugins: {
         legend: {
-          position: 'top',
+          position: 'bottom',
         },
         title: {
           display: true,
           text: '차수별 접종 추이',
+          position: 'top',
         },
       },
     });
@@ -71,4 +74,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.line {
+}
+</style>

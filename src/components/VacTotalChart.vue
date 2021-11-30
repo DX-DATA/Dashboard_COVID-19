@@ -1,5 +1,7 @@
 <template>
-  <DoughnutChart :chartData="doughnutData" :options="doughnutOption" />
+  <section class="chart_card doughnut">
+    <DoughnutChart :chartData="doughnutData" :options="doughnutOption" />
+  </section>
 </template>
 
 <script>
@@ -33,11 +35,13 @@ export default {
     const doughnutOption = ref({
       responsive: true,
       plugins: {
+        // 각 요소의 색상
         legend: {
-          position: 'top',
+          position: 'bottom',
         },
         title: {
           display: true,
+          position: 'top',
           text: '백신 차수별 총 접종 그래프',
         },
       },
@@ -48,4 +52,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.doughnut {
+}
+</style>

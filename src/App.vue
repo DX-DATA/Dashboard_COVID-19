@@ -1,25 +1,64 @@
 <template>
-  <Main />
+  <div id="app" class="wrapper">
+    <div v-if="Logined">
+      <DashBoard></DashBoard>
+    </div>
+    <div v-if="!Logined">
+      <Login></Login>
+    </div>
+  </div>
 </template>
 
 <script>
-import Main from './components/Main.vue';
-
+//import HelloWorld from './components/HelloWorld.vue'
+import DashBoard from './components/DashBoard.vue'
+import Login from './components/user/Login.vue';
+import axios from 'axios'
+import api from './api/api'
 export default {
   name: 'App',
   components: {
-    Main,
+    //HelloWorld
+    DashBoard,
+    Login,
   },
-};
+  mounted() {
+    this.check();
+  },
+  data() {
+    return {
+      Logined : false,
+    }
+  },
+  methods : {
+    check : function() {
+      console.log(api.getCookie('auth'));
+      axios({
+        method : 'post',
+        url : "/api/auth/check",
+        headers : {'Authorization': 'Bearer ' + api.getCookie('auth')}
+      }).then(response => {
+        console.log(response)
+        if(response.data === 1) {
+          this.Logined = true;
+        } else {
+          this.Logined = false;
+        }
+      });
+    },
+    ch : function() {
+      this.Logined = !this.Logined
+    }
+  }
+}
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
+
+* {
+  padding : 0px;
+  margin : 0px;
+}
+
+
 </style>

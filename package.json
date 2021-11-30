@@ -16,7 +16,11 @@
     "chart.js": "^3.6.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
-    "vue-chart-3": "^0.5.11"
+    "vue-chart-3": "^0.5.11",
+    "vue-3-socket.io": "^1.0.4",
+    "vue-router": "^4.0.12",
+    "vue-socket.io": "^3.0.10",
+    "socket.io": "^4.3.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

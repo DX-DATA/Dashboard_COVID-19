@@ -4,9 +4,9 @@
       <Nav />
     </div>
 
-    <div class="header">
+    <!-- <div class="header">
       <Header />
-    </div>
+    </div> -->
 
     <div class="content">
           <router-view />
@@ -21,13 +21,13 @@
 
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
-import Header from './layout/Header.vue'
+//import Header from './layout/Header.vue'
 import Nav from './layout/Nav.vue'
 export default {
   name: 'DashBoard',
   components: {
     Nav,
-    Header
+    //Header
   },
   methods : {
       logout : function() {
@@ -52,7 +52,7 @@ export default {
   grid-template-columns : 240px 1fr;
   grid-template-rows : 60px 1fr 80px;
   grid-template-areas:
-  "navbar header"
+  "navbar content"
   "navbar content"
   "navbar content"
 }
@@ -99,7 +99,7 @@ export default {
   .wrapper {
     display: flex;
     flex-direction : column;
-
+    height : inherit
   }
 }
 

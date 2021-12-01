@@ -1,183 +1,91 @@
 <template>
-    <div class="elecar-container">
-        <table>
-            <tr>
-                <th>
-                고소차 ID
-                </th>
-                <th>
-                경도
-                </th>
-                <th>
-                위도
-                </th>
-                <th>
-                사용부서
-                </th>            
-                <th>
-                최종 업데이트 시간
-                </th>
-            </tr>
-            <tr v-for="data in state.datas" v-bind:key="data.eqp_id" v-on:click="state.click(data)"> 
-                <td v-for="ele in data" v-bind:key="ele">
-                    {{ele}}
-                </td>
-            </tr>
-        </table>
-        
-        <KakaoMap :options="state.mapOption" :positions="state.positions" :key="state.mapOption.center.lat"/>
-
+    <div class="container-fluid">
+        <article class="card grid-item">
+            <h4>현재 사용중인 고소차</h4>
+            <table class="table table-hover">
+                <thead>
+                    <th>
+                        고소차 ID
+                    </th>
+                    <th>
+                        사용부서
+                    </th>
+                    <th>
+                        사용 시작 시간
+                    </th>
+                    <th>
+                        사용 종료 시간
+                    </th>
+                </thead>
+                    <tr>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                    </tr>
+                    <tr>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                    </tr>
+                    <tr>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                        <td>dtd</td>
+                    </tr>                    
+            </table>
+        </article>
+        <article class="card grid-item">
+            <h4> 주간 고소차 사용량</h4>
+            <table class="table table-hover">
+                대충 그래프 들어있다는 내용
+            </table>
+        </article>
+        <article id="location" class="card grid-item">
+            <h4>실시간 고소차 위치</h4>
+            <table class="table table-hover">
+                카카오맵
+            </table>
+        </article>
     </div>
 </template>
 
 
 <script>
-import { reactive } from '@vue/reactivity'
-import { onMounted, onUnmounted } from '@vue/runtime-core'
-import KakaoMap from '../modules/KakaoMap.vue';
-import axios from 'axios'
-import api from '../../api/api'
-import io from 'socket.io/client-dist/socket.io'
 
 export default {
-    components: { KakaoMap },
-    setup() {
-        //socket
-        let socket = io('http://127.0.0.1:3333')
+    components: {},
+    setup() {       
 
-        let setData = (data) => {
-            console.log(data);
-            for(let i = 0; i < state.datas.length; i++) {
-                if(state.datas[i].eqp_id === data[0]) {
-                    state.datas[i].eqp_id = data[0];
-                    state.datas[i].current_gps_lat = data[1];
-                    state.datas[i].current_gps_lon = data[2];
-                    state.datas[i].department = data[4];
-                    state.datas[i].last_timestamp = data[7];
-                }
-            }
-        }
-
-        onMounted(()=> {
-            
-            axios.get('/api/elecar/current', {headers : {
-                Authorization: 'Bearer ' + api.getCookie('auth'), 
-            }}).then(response => {
-                response.data.forEach(element => {
-                    if(element.current_gps_lon != 0) {
-                        state.datas.push(element);
-                    }
-                });
-                console.log(state.datas);
-            }).catch(error => {
-                console.log(error)
-            });         
-
-            socket.on('new_elecar', function(data) {
-                setData(data);
-            })
-        })
-
-        let state = reactive({
-            datas : [],
-            mapOption : {
-                center : {
-                    lat : 33.450701,
-                    lng : 126.570667,
-                },
-                level : 6,
-            },
-            positions : [],
-            click : (data) => {
-                let param = data.eqp_id + "_" + data.last_timestamp.slice(0,10);
-
-                axios.get('/api/elecar/locations?key=' + param).then(response => {
-                    state.positions = response.data;
-                    state.mapOption.center.lat = data.current_gps_lat;
-                    state.mapOption.center.lng = data.current_gps_lon;
-                }).catch(err => {
-                    console.log(err)
-                })
-
-                
-            }
-        });
-
-        onUnmounted(() => {
-            socket.disconnect();
-        })
-
-
-        return {state}
-
-
-                
     },
 }
 </script>
 
 
 <style scoped>
-
-
-table {
-  border-collapse: collapse;
-  border: 1px solid black;
-} 
-
-td { 
-  -webkit-animation: blink-2 0.8s ease-in both;
-  animation: blink-2 0.8s ease-in both;
-  border : 1px solid #eeeeee;
-  padding : 5px
-}
-
-th {
-  padding : 5px;
-  border : 1px solid #eeeeee;
+.container-fluid {
+    margin-top : 10px;
+    display : grid;
+    grid-template-columns: 1fr 2fr;
 
 }
 
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.grid-item {
+    margin : 10px;
+    padding : 5px;
 }
 
-.blink-2 {
-	-webkit-animation: blink-2 0.8s ease-in both;
-  animation: blink-2 0.8s ease-in both;
+#location {
+    grid-column-start: 1;
+	grid-column-end: 3;
 }
 
-@-webkit-keyframes blink-2 {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes blink-2 {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 1;
+@media (max-width: 768px) {
+  .container-fluid {
+    display: flex;
+    flex-direction : column;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="nav_component d-flex flex-column">
     <div class="nav-title">
-      <h1>DXDATA DashBoard</h1>
+      <h1>Corona DashBoard</h1>
     </div>
     <ul class="nav nav-pills flex-column mb-auto">
       <li>
@@ -13,19 +13,6 @@
         <router-link to="/vaccine" class="nav_link text-white"
           ><i class="fas fa-syringe"></i> 백신</router-link
         >
-      </li>
-      <li>
-        <router-link to="/elecar" class="nav_link text-white"
-          ><i class="fas fa-level-up-alt"></i> 고소차</router-link
-        >
-      </li>
-      <li>
-        <router-link to="/crane" class="nav_link text-white"
-          ><i class="fas fa-cubes"></i> 크레인</router-link
-        >
-      </li>
-      <li>
-        <a href="#" v-on:click="logout" class="nav_link text-white">로그아웃</a>
       </li>
     </ul>
     <div class="dropdown">
